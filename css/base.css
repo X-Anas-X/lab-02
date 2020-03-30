@@ -1,0 +1,23 @@
+@import url('https://fonts.googleapis.com/css?family=Playfair+Display');
+
+body {
+  width: 813px;
+  margin: 0 auto;
+}
+header {
+  width: 80%;
+  margin: 50px auto;
+  text-align: center;
+  padding: 25px;
+  background-color: whitesmoke;
+  border-radius: 25px;
+}
+* {
+  font-family: 'Playfair Display', serif;
+  text-align: center;
+  font-size: 15px;
+}
+footer{
+  font-size: 18px;
+  margin-top: 25px;
+}
