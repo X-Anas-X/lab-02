@@ -1,62 +1,136 @@
+'use strict';
 $(document).ready(function() {
-// creating an array to push the keyword into.
-  let keyWordArr = [];
-  //////////////////////////
-  function Images (pic) { //constructor
-    this.title = pic.title;
+
+  // array for keywords.
+  let keyArr = [];
+  //////////////////////////////////////////////////////////////
+  // Constructor function for the images from JSON
+  function Images (pic) {
     this.image_url = pic.image_url;
+    this.title = pic.title;
+    this.description = pic.description;
     this.keyword = pic.keyword;
     this.horns = pic.horns;
-    this.description = pic.discription;
   }
-  ///////////////////////////////////////////////
-  $('#form').on('change', function(){
-    var selectImage = this.value;
-    for (let index = 0; index < keyWordArr.length; index++) {
-      if (Images[index].keyword === selectImage) {
-        keyWordArr.push(Images[index]);
+  ///////////////////////////////////////////////////////////////
 
-      }
-
+  // render the unique filter
+  Images.prototype.unique = function () {
+    if (!keyArr.includes(this.keyword)) {
+      keyArr.push(this.keyword);
+      let cloneSelect = $('option:first').clone();
+      cloneSelect.attr('value',this.keyword);
+      cloneSelect.text(this.keyword);
+      $('select').append(cloneSelect);
     }
-    // renderKey();
-  });
-  // function renderKey(){
-  //   $('#photo-template').empty();
-  //   keyWordArr.forEach(pic)=>{
-  //     let container = $('<div></div>');
-  //     $('#photo-template').append(container);
-  //     let imgName = $('<h2></h2>').text(pic.title);
-  //     container.append(imgName);
-  //     let img = $('<img></img>').attr('src', pic.image_url);
-  //     container.append(img);
-  //     let para = $('<p></p>').text(pic.description);
-  //     container.append(para);
-  //   }
-  // }
-  ///////////////////////////////////////////////
-  Images.prototype.render = function() {
-    let $picClone = $('#photo-template').clone();
-    $picClone.find('h2').text(this.title);
-    $picClone.find('img').attr('src',this.image_url);
-    $picClone.find('p#p1').text(this.discription);
-    $picClone.find('p#p2').text(`horns: ${this.horns}`);
+  };
+  ///////////////////////////////////////////////////////////
 
-    $picClone.removeAttr('id');
-    $picClone.attr('id', this.title);
-    $('main').append($picClone);
+  // render the cloned images properities.
+
+  Images.prototype.render = function() {
+    let $imgCLone = $('#photo-template').clone();
+    $('#photo-template section').remove();
+    $imgCLone.find('h2').text(this.title);
+    $imgCLone.find('img').attr('src',this.image_url);
+    $imgCLone.removeAttr('id');
+    $imgCLone.find('p').text(this.description);
+    $imgCLone.attr('class', `${this.keyword} visiblity`);
+    $('main').append($imgCLone);
   };
-  //////////////////////////////////////////////////
-  const readJson = () => {
-    $.ajax('Data/page-1.json', {method: 'GET', dataType: 'JSON'})
-      .then(data => {
-        data.forEach(pics =>{
-          let pic = new Images(pics);
-          pic.render();
-        });
+
+  /////////////////////////////////////////////////////////
+
+  // TO GET THE INFO INSIDE JSON FILE
+  const getJson = function(){
+    $.ajax('./data/page-1.json', {method: 'get', dataType: 'JSON'}).then(data => {
+      console.log(data);
+      data.forEach(value => {
+        let finalPic = new Images(value);
+
+        finalPic.render();
+        finalPic.unique();
       });
+    });
   };
-  readJson();
+  getJson();
+
+  ////////////////////////////////////////////////////////
+  //Event listener for the filter
+  $('select').on('change', function(){
+    $('section').removeClass('visiblity');
+    let $buttonScroll = $('select option:selected').val();
+    $(`[class*=${$buttonScroll}]`).addClass('visiblity');
+  });
 });
+
+
+
+
+
+
+
+//////////////////////////////////////////////////////////////////////////////////////////////
+
+//faild attempt here. need to ask TA for it.
+
+
+// $(document).ready(function() {
+//   var imagesArr = [];
+//   var selectPic = [];
+//   // creating an array to push the keyword into.
+//   //////////////////////////
+//   function Images (pic) { //constructor
+//     this.title = pic.title;
+//     this.image_url = pic.image_url;
+//     this.keyword = pic.keyword;
+//     this.horns = pic.horns;
+//     this.description = pic.discription;
+//     imagesArr.push(this);
+//   }
+//   ///////////////////////////////////////////////
+//   Images.prototype.renderOption = function(){
+//     let picOption = $('<option></option>').text(this.title);
+//     picOption.attr('value', this.keyword);
+//     $('select').append(picOption);
+//   };
+//   ////////////////////////////////////////////////
+//   $('select').on('change', function() {
+//     var selectImg = this.value;
+//     for(let i = 0 ; i < imagesArr.length ; i++){
+//       if (imagesArr[i].keyword === selectImg){
+//         selectPic.push(imagesArr[i]);
+//       }
+//     }
+//     pic.render();
+//   }
+//   );
+
+//   ///////////////////////////////////////////////
+//   Images.prototype.render = function() {
+//     let $picClone = $('#photo-template').clone();
+//     $picClone.find('h2').text(this.title);
+//     $picClone.find('img').attr('src',this.image_url);
+//     $picClone.find('p#p1').text(this.discription);
+//     $picClone.find('p#p2').text(`horns: ${this.horns}`);
+//     $picClone.removeAttr('id');
+//     $picClone.attr('id', this.keyword);
+//     $('main').append($picClone);
+//   };
+//   //////////////////////////////////////////////////
+//   const readJson = () => {
+//     $.ajax('Data/page-1.json', {method: 'GET', dataType: 'JSON'})
+//       .then(data => {
+//         data.forEach(value =>{
+//           let pic = new Images(value);
+
+//           pic.render();
+//           pic.renderOption();
+
+//         });
+//       });
+//   };
+//   readJson();
+// });
 
 
