@@ -43,7 +43,7 @@ $(document).ready(function() {
 
   // TO GET THE INFO INSIDE JSON FILE
   const getJson = function(){
-    $.ajax('../data/page-1.json', {method: 'get', dataType: 'JSON'}).then(data => {
+    $.ajax('./data/page-1.json', {method: 'get', dataType: 'JSON'}).then(data => {
       console.log(data);
       data.forEach(value => {
         let finalPic = new Images(value);
@@ -63,13 +63,6 @@ $(document).ready(function() {
     $(`[class*=${$buttonScroll}]`).addClass('visiblity');
   });
 });
-
-
-
-
-
-
-
 //////////////////////////////////////////////////////////////////////////////////////////////
 
 //faild attempt here. need to ask TA for it.
