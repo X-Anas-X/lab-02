@@ -63,7 +63,6 @@ $(document).ready(function() {
     $(`[class*=${$buttonScroll}]`).addClass('visiblity');
   });
 });
-
 //////////////////////////////////////////////////////////////////////////////////////////////
 
 //faild attempt here. need to ask TA for it.
